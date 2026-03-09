@@ -10,7 +10,7 @@ public class PalindromeCheckerApp{
         if (word.equals(reversed)) {
             System.out.println("The word \"" + word + "\" is a Palindrome.");
         } else {
-            System.out.println("The word \"" + word + "\" is NOT a Palindrome.");
+            System.out.println("The word \"" + word + "\" is NOT a Palindrome. ");
         }
 
         System.out.println("Program finished.");
