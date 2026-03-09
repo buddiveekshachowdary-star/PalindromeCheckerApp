@@ -1,21 +1,50 @@
 public class PalindromeCheckerApp{
     public static void main(String[] args) {
-        String text = "A man a plan a canal Panama";
+        // Create instance of PalindromeChecker
+        PalindromeChecker checker = new PalindromeChecker();
 
-// Normalize the string: remove spaces and convert to lowercase
+        // Test strings
+        String text1 = "Madam";
+        String text2 = "Hello";
+
+        // Use the checkPalindrome() method
+        if (checker.checkPalindrome(text1)) {
+            System.out.println("\"" + text1 + "\" is a Palindrome");
+        } else {
+            System.out.println("\"" + text1 + "\" is NOT a Palindrome");
+        }
+
+        if (checker.checkPalindrome(text2)) {
+            System.out.println("\"" + text2 + "\" is a Palindrome");
+        } else {
+            System.out.println("\"" + text2 + "\" is NOT a Palindrome");
+        }
+    }
+}
+
+// ================= PalindromeChecker Class =================
+class PalindromeChecker {
+
+    // Encapsulated method to check palindrome
+    public boolean checkPalindrome(String text) {
+        if (text == null || text.isEmpty()) return false;
+
+        // Normalize text: remove spaces and convert to lowercase
         String normalized = text.replaceAll("\\s+", "").toLowerCase();
 
-// Reverse the normalized string
-        String reversed = "";
-        for (int i = normalized.length() - 1; i >= 0; i--) {
-            reversed += normalized.charAt(i);
+        // Use char array to check palindrome
+        char[] chars = normalized.toCharArray();
+        int start = 0;
+        int end = chars.length - 1;
+
+        while (start < end) {
+            if (chars[start] != chars[end]) {
+                return false;
+            }
+            start++;
+            end--;
         }
 
-// Check palindrome
-        if (normalized.equals(reversed)) {
-            System.out.println("\"" + text + "\" is a Palindrome (ignoring spaces & case)");
-        } else {
-            System.out.println("\"" + text + "\" is NOT a Palindrome (ignoring spaces & case)");
-        }
+        return true;
     }
 }
