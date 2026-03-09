@@ -1,21 +1,21 @@
 public class PalindromeCheckerApp{
     public static void main(String[] args) {
+        String text = "A man a plan a canal Panama";
 
-        String text = "madam";
+// Normalize the string: remove spaces and convert to lowercase
+        String normalized = text.replaceAll("\\s+", "").toLowerCase();
 
-        boolean isPalindrome = isPalindromeRecursive(text, 0, text.length() - 1);
-
-        if (isPalindrome) {
-            System.out.println(text + " is a Palindrome");
-        } else {
-            System.out.println(text + " is NOT a Palindrome");
+// Reverse the normalized string
+        String reversed = "";
+        for (int i = normalized.length() - 1; i >= 0; i--) {
+            reversed += normalized.charAt(i);
         }
-    }
 
-    // Recursive method outside main
-    static boolean isPalindromeRecursive(String str, int start, int end) {
-        if (start >= end) return true;
-        if (str.charAt(start) != str.charAt(end)) return false;
-        return isPalindromeRecursive(str, start + 1, end - 1);
+// Check palindrome
+        if (normalized.equals(reversed)) {
+            System.out.println("\"" + text + "\" is a Palindrome (ignoring spaces & case)");
+        } else {
+            System.out.println("\"" + text + "\" is NOT a Palindrome (ignoring spaces & case)");
+        }
     }
 }
