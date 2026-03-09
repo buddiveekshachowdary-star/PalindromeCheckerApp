@@ -2,25 +2,57 @@ public class PalindromeCheckerApp{
     public static void main(String[] args) {
         String text = "madam";
 
-// Create Deque
-        java.util.Deque<Character> deque = new java.util.LinkedList<>();
+// Node class
+        class Node {
+            char data;
+            Node next;
 
-// Insert characters into deque
-        for (int i = 0; i < text.length(); i++) {
-            deque.addLast(text.charAt(i));
+            Node(char data) {
+                this.data = data;
+                this.next = null;
+            }
         }
+
+// Convert string to linked list
+        Node head = new Node(text.charAt(0));
+        Node current = head;
+
+        for (int i = 1; i < text.length(); i++) {
+            current.next = new Node(text.charAt(i));
+            current = current.next;
+        }
+
+// Find middle using fast and slow pointer
+        Node slow = head;
+        Node fast = head;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+
+// Reverse second half
+        Node prev = null;
+        while (slow != null) {
+            Node next = slow.next;
+            slow.next = prev;
+            prev = slow;
+            slow = next;
+        }
+
+// Compare both halves
+        Node first = head;
+        Node second = prev;
 
         boolean isPalindrome = true;
 
-// Compare front and rear characters
-        while (deque.size() > 1) {
-            char front = deque.removeFirst();
-            char rear = deque.removeLast();
-
-            if (front != rear) {
+        while (second != null) {
+            if (first.data != second.data) {
                 isPalindrome = false;
                 break;
             }
+            first = first.next;
+            second = second.next;
         }
 
 // Print result
