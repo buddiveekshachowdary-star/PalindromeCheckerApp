@@ -1,80 +1,88 @@
 public class PalindromeCheckerApp{
     public static void main(String[] args) {
-        String text = "madam";
+        String text = "A man a plan a canal Panama";
 
-        // Choose strategy: 1 - Stack, 2 - Deque (simulate using arrays)
-        int choice = 1; // change to 2 for deque-style check
+        // Normalize the string for fair comparison (remove spaces, lowercase)
+        String normalized = text.replaceAll("\\s+", "").toLowerCase();
 
-        PalindromeStrategy strategy;
+        // Run different palindrome algorithms and measure execution time
+        long start, end;
 
-        if (choice == 1) {
-            strategy = new StackStrategy();
-        } else {
-            strategy = new DequeStrategy();
-        }
+        // 1️⃣ Simple Reverse
+        start = System.nanoTime();
+        boolean simpleResult = simpleReverse(normalized);
+        end = System.nanoTime();
+        long simpleTime = end - start;
 
-        boolean result = strategy.isPalindrome(text);
+        // 2️⃣ Character Array Method
+        start = System.nanoTime();
+        boolean arrayResult = charArrayMethod(normalized);
+        end = System.nanoTime();
+        long arrayTime = end - start;
 
-        if (result) {
-            System.out.println("\"" + text + "\" is a Palindrome using " + strategy.getClass().getSimpleName());
-        } else {
-            System.out.println("\"" + text + "\" is NOT a Palindrome using " + strategy.getClass().getSimpleName());
-        }
+        // 3️⃣ Two-pointer Deque Simulation
+        start = System.nanoTime();
+        boolean dequeResult = dequeMethod(normalized);
+        end = System.nanoTime();
+        long dequeTime = end - start;
+
+        // 4️⃣ Stack Simulation
+        start = System.nanoTime();
+        boolean stackResult = stackMethod(normalized);
+        end = System.nanoTime();
+        long stackTime = end - start;
+
+        // Display results
+        System.out.println("Palindrome check results for: \"" + text + "\"\n");
+
+        System.out.println("Simple Reverse: " + simpleResult + " | Time: " + simpleTime + " ns");
+        System.out.println("Char Array Method: " + arrayResult + " | Time: " + arrayTime + " ns");
+        System.out.println("Deque Method: " + dequeResult + " | Time: " + dequeTime + " ns");
+        System.out.println("Stack Method: " + stackResult + " | Time: " + stackTime + " ns");
     }
-}
 
-// ================= Strategy Interface =================
-interface PalindromeStrategy {
-    boolean isPalindrome(String text);
-}
+    // ================= Algorithm Implementations =================
 
-// ================= Stack Strategy (using array) =================
-class StackStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean isPalindrome(String text) {
-        int n = text.length();
-        char[] stack = new char[n];
-        int top = -1;
-
-        // Push characters onto stack
-        for (int i = 0; i < n; i++) {
-            stack[++top] = text.charAt(i);
+    // Simple Reverse
+    static boolean simpleReverse(String text) {
+        String reversed = "";
+        for (int i = text.length() - 1; i >= 0; i--) {
+            reversed += text.charAt(i);
         }
+        return text.equals(reversed);
+    }
 
-        // Pop characters and compare
-        for (int i = 0; i < n; i++) {
-            if (text.charAt(i) != stack[top--]) {
-                return false;
-            }
+    // Char Array Method
+    static boolean charArrayMethod(String text) {
+        char[] chars = text.toCharArray();
+        int start = 0, end = chars.length - 1;
+        while (start < end) {
+            if (chars[start++] != chars[end--]) return false;
         }
-
         return true;
     }
-}
 
-// ================= Deque Strategy (using array) =================
-class DequeStrategy implements PalindromeStrategy {
+    // Deque Simulation
+    static boolean dequeMethod(String text) {
+        char[] deque = new char[text.length()];
+        for (int i = 0; i < text.length(); i++) deque[i] = text.charAt(i);
 
-    @Override
-    public boolean isPalindrome(String text) {
-        int n = text.length();
-        char[] deque = new char[n];
-        int front = 0;
-        int rear = n - 1;
-
-        // Fill array
-        for (int i = 0; i < n; i++) {
-            deque[i] = text.charAt(i);
-        }
-
-        // Compare front and rear
+        int front = 0, rear = deque.length - 1;
         while (front < rear) {
-            if (deque[front++] != deque[rear--]) {
-                return false;
-            }
+            if (deque[front++] != deque[rear--]) return false;
         }
+        return true;
+    }
 
+    // Stack Simulation
+    static boolean stackMethod(String text) {
+        char[] stack = new char[text.length()];
+        int top = -1;
+        for (int i = 0; i < text.length(); i++) stack[++top] = text.charAt(i);
+
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) != stack[top--]) return false;
+        }
         return true;
     }
 }
