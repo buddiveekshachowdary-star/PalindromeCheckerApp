@@ -1,48 +1,78 @@
 public class PalindromeCheckerApp{
     public static void main(String[] args) {
-        // Create instance of PalindromeChecker
-        PalindromeChecker checker = new PalindromeChecker();
+        String text = "madam";
 
-        // Test strings
-        String text1 = "Madam";
-        String text2 = "Hello";
+        // Choose strategy: 1 - Stack, 2 - Deque (simulate using arrays)
+        int choice = 1; // change to 2 for deque-style check
 
-        // Use the checkPalindrome() method
-        if (checker.checkPalindrome(text1)) {
-            System.out.println("\"" + text1 + "\" is a Palindrome");
+        PalindromeStrategy strategy;
+
+        if (choice == 1) {
+            strategy = new StackStrategy();
         } else {
-            System.out.println("\"" + text1 + "\" is NOT a Palindrome");
+            strategy = new DequeStrategy();
         }
 
-        if (checker.checkPalindrome(text2)) {
-            System.out.println("\"" + text2 + "\" is a Palindrome");
+        boolean result = strategy.isPalindrome(text);
+
+        if (result) {
+            System.out.println("\"" + text + "\" is a Palindrome using " + strategy.getClass().getSimpleName());
         } else {
-            System.out.println("\"" + text2 + "\" is NOT a Palindrome");
+            System.out.println("\"" + text + "\" is NOT a Palindrome using " + strategy.getClass().getSimpleName());
         }
     }
 }
 
-// ================= PalindromeChecker Class =================
-class PalindromeChecker {
+// ================= Strategy Interface =================
+interface PalindromeStrategy {
+    boolean isPalindrome(String text);
+}
 
-    // Encapsulated method to check palindrome
-    public boolean checkPalindrome(String text) {
-        if (text == null || text.isEmpty()) return false;
+// ================= Stack Strategy (using array) =================
+class StackStrategy implements PalindromeStrategy {
 
-        // Normalize text: remove spaces and convert to lowercase
-        String normalized = text.replaceAll("\\s+", "").toLowerCase();
+    @Override
+    public boolean isPalindrome(String text) {
+        int n = text.length();
+        char[] stack = new char[n];
+        int top = -1;
 
-        // Use char array to check palindrome
-        char[] chars = normalized.toCharArray();
-        int start = 0;
-        int end = chars.length - 1;
+        // Push characters onto stack
+        for (int i = 0; i < n; i++) {
+            stack[++top] = text.charAt(i);
+        }
 
-        while (start < end) {
-            if (chars[start] != chars[end]) {
+        // Pop characters and compare
+        for (int i = 0; i < n; i++) {
+            if (text.charAt(i) != stack[top--]) {
                 return false;
             }
-            start++;
-            end--;
+        }
+
+        return true;
+    }
+}
+
+// ================= Deque Strategy (using array) =================
+class DequeStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean isPalindrome(String text) {
+        int n = text.length();
+        char[] deque = new char[n];
+        int front = 0;
+        int rear = n - 1;
+
+        // Fill array
+        for (int i = 0; i < n; i++) {
+            deque[i] = text.charAt(i);
+        }
+
+        // Compare front and rear
+        while (front < rear) {
+            if (deque[front++] != deque[rear--]) {
+                return false;
+            }
         }
 
         return true;
