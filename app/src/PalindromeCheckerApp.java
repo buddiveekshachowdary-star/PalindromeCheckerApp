@@ -2,22 +2,22 @@ public class PalindromeCheckerApp{
     public static void main(String[] args) {
         String text = "madam";
 
-// Create Stack and Queue
-        java.util.Stack<Character> stack = new java.util.Stack<>();
-        java.util.Queue<Character> queue = new java.util.LinkedList<>();
+// Create Deque
+        java.util.Deque<Character> deque = new java.util.LinkedList<>();
 
-// Push into stack and enqueue into queue
+// Insert characters into deque
         for (int i = 0; i < text.length(); i++) {
-            char ch = text.charAt(i);
-            stack.push(ch);
-            queue.add(ch);
+            deque.addLast(text.charAt(i));
         }
 
         boolean isPalindrome = true;
 
-// Compare dequeue (FIFO) with pop (LIFO)
-        while (!stack.isEmpty() && !queue.isEmpty()) {
-            if (stack.pop() != queue.remove()) {
+// Compare front and rear characters
+        while (deque.size() > 1) {
+            char front = deque.removeFirst();
+            char rear = deque.removeLast();
+
+            if (front != rear) {
                 isPalindrome = false;
                 break;
             }
